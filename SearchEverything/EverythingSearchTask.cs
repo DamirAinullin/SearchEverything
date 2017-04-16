@@ -1,6 +1,6 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
@@ -20,71 +20,28 @@ namespace SearchEverything
 
         protected override void OnStartSearch()
         {
-            // Use the original content of the text box as the target of the search. 
-            //var separator = new[] { Environment.NewLine };
-            //string[] contentArr = ((SearchBox)_searchWindow.Content).SearchContent.Split(separator, StringSplitOptions.None);
-
-            // Get the search option. 
-            var matchCase = _searchWindow.MatchCaseOption.Value;
+            // Get the search options.
+            bool matchCase = _searchWindow.MatchCaseOption.Value;
+            bool useRegex = _searchWindow.UseRegexOption.Value;
 
             // Set variables that are used in the finally block.
-            StringBuilder searchContentBuilder = new StringBuilder("");
             uint resultCount = 0;
             ErrorCode = VSConstants.S_OK;
-
+            List<SearchResult> contentItems = new List<SearchResult>();
             try
             {
-                string searchString = SearchQuery.SearchString;
-
-                // If the search string contains the filter string, filter the content array. 
-               /* string filterString = "lines:\"even\"";
-
-                if (SearchQuery.SearchString.Contains(filterString))
-                {
-                    // Retain only the even items in the array.
-                    contentArr = GetEvenItems(contentArr);
-
-                    // Remove 'lines:"even"' from the search string.
-                    searchString = RemoveFromString(searchString, filterString);
-                }*/
                 lock (_searchWindow)
                 {
                     // Determine the results. 
-                    var everythingApiManager = new EverythingApiManager();
-
-                    var contentItems = everythingApiManager.Search(searchString);
-                    foreach (var item in contentItems)
+                    var everythingApiManager = new EverythingApiManager
                     {
-                        searchContentBuilder.Append(item.FullPath);
-                        searchContentBuilder.Append("\n");
-                    }
+                        MatchCase = matchCase,
+                        EnableRegex = useRegex
+                    };
+                    contentItems = everythingApiManager.Search(SearchQuery.SearchString).ToList();
+                    resultCount = (uint)contentItems.Count;
                 }
-                /*uint progress = 0;
-                foreach (string line in contentArr)
-                {
-                    if (matchCase)
-                    {
-                        if (line.Contains(searchString))
-                        {
-                            sb.AppendLine(line);
-                            resultCount++;
-                        }
-                    }
-                    else
-                    {
-                        if (line.ToLower().Contains(searchString.ToLower()))
-                        {
-                            sb.AppendLine(line);
-                            resultCount++;
-                        }
-                    }
-                    
-
-                    SearchCallback.ReportProgress(this, progress++, (uint)contentArr.GetLength(0));
-
-                    // Uncomment the following line to demonstrate the progress bar. 
-                    // System.Threading.Thread.Sleep(100);
-                }*/
+                //SearchCallback.ReportProgress(this, progress++, (uint)contentArr.GetLength(0));
             }
             catch (Exception e)
             {
@@ -93,7 +50,9 @@ namespace SearchEverything
             finally
             {
                 ThreadHelper.Generic.Invoke(() =>
-                    { ((SearchBox)_searchWindow.Content).SearchResultsTextBox.Text = searchContentBuilder.ToString(); });
+                {
+                    ((SearchBox) _searchWindow.Content).ResultListBox.ItemsSource = contentItems;
+                });
 
                 SearchResults = resultCount;
             }
@@ -106,31 +65,6 @@ namespace SearchEverything
         protected override void OnStopSearch()
         {
             SearchResults = 0;
-        }
-
-        private string RemoveFromString(string origString, string stringToRemove)
-        {
-            int index = origString.IndexOf(stringToRemove);
-            if (index == -1)
-            {
-                return origString;
-            }
-            return origString.Substring(0, index) + origString.Substring(index + stringToRemove.Length);
-        }
-
-        private string[] GetEvenItems(string[] contentArr)
-        {
-            int length = contentArr.Length / 2;
-            string[] evenContentArr = new string[length];
-
-            int indexB = 0;
-            for (int index = 1; index < contentArr.Length; index += 2)
-            {
-                evenContentArr[indexB] = contentArr[index];
-                indexB++;
-            }
-
-            return evenContentArr;
         }
     }
 }

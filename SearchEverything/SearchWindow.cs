@@ -53,7 +53,8 @@ namespace SearchEverything
         public override void ClearSearch()
         {
             SearchBox control = (SearchBox)Content;
-            control.SearchResultsTextBox.Text = control.SearchContent;
+            //control.SearchResultsTextBox.Text = "";
+            control.ResultListBox.ItemsSource = null;
         }
 
         public override void ProvideSearchSettings(IVsUIDataSource pSearchSettings)
@@ -69,8 +70,7 @@ namespace SearchEverything
             {
                 if (_optionsEnum == null)
                 {
-                    List<IVsWindowSearchOption> list = new List<IVsWindowSearchOption> {MatchCaseOption};
-
+                    var list = new List<IVsWindowSearchOption> {MatchCaseOption, UseRegexOption};
                     _optionsEnum = new WindowSearchOptionEnumerator(list);
                 }
                 return _optionsEnum;
@@ -82,11 +82,16 @@ namespace SearchEverything
             _matchCaseOption ?? (_matchCaseOption =
             new WindowSearchBooleanOption("Match case", "Match case", false));
 
+        private WindowSearchBooleanOption _useRegexOption;
+        public WindowSearchBooleanOption UseRegexOption =>
+            _useRegexOption ?? (_useRegexOption =
+                new WindowSearchBooleanOption("Use regular expressions", "Use regular expressions", false));
+
         public override IVsEnumWindowSearchFilters SearchFiltersEnum
         {
             get
             {
-                List<IVsWindowSearchFilter> list = new List<IVsWindowSearchFilter>
+                var list = new List<IVsWindowSearchFilter>
                 {
                     new WindowSearchSimpleFilter("Search even lines only", "Search even lines only", "lines", "even")
                 };

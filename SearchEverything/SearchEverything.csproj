@@ -64,6 +64,7 @@
     <Compile Include="EverythingApi\Exceptions\RegisterClassExException.cs" />
     <Compile Include="EverythingApi\ResultType.cs" />
     <Compile Include="EverythingApi\SearchResult.cs" />
+    <Compile Include="OpenFileManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SearchBox.xaml.cs">
       <DependentUpon>SearchBox.xaml</DependentUpon>

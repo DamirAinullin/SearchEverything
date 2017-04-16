@@ -68,6 +68,8 @@ namespace SearchEverything
             Command.Initialize(this);
             base.Initialize();
 
+            OpenFileManager.CreateInstance(this);
+
             var everythingServiceManager = new EverythingServiceManager();
 
             if (!everythingServiceManager.IsServiceInstalled())

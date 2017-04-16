@@ -6,6 +6,7 @@
 
 using System;
 using System.ComponentModel.Design;
+using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
 
@@ -88,13 +89,13 @@ namespace SearchEverything
             // is actually the only one.
             // The last flag is set to true so that if the tool window does not exists it will be created.
             ToolWindowPane window = package.FindToolWindow(typeof(SearchWindow), 0, true);
-            if ((null == window) || (null == window.Frame))
+            if (window?.Frame == null)
             {
-                throw new NotSupportedException("Cannot create tool window");
+                throw new NotSupportedException("Cannot create search window");
             }
 
             IVsWindowFrame windowFrame = (IVsWindowFrame)window.Frame;
-            Microsoft.VisualStudio.ErrorHandler.ThrowOnFailure(windowFrame.Show());
+            ErrorHandler.ThrowOnFailure(windowFrame.Show());
         }
     }
 }

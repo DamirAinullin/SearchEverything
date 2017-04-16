@@ -3,12 +3,21 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:platformUi="clr-namespace:Microsoft.Internal.VisualStudio.PlatformUI;assembly=Microsoft.VisualStudio.Shell.14.0"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
     <StackPanel Orientation="Vertical">
-        <TextBox Name="resultsTextBox" Height="800.0"
+        <!--<TextBox Name="resultsTextBox" Height="800.0"
                  Width="800.0"
                  IsReadOnly="True">
         </TextBox>
+        <CheckBox x:Name="checkBox" Content="CheckBox"/>-->
+        <ListBox Height="800.0" Width="800.0" Name="RListBox" ItemsSource="{Binding}">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <TextBlock Text="{Binding FullPath}" MouseLeftButtonDown="TextBlock_MouseLeftButtonDown"/>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
     </StackPanel>
 </UserControl>

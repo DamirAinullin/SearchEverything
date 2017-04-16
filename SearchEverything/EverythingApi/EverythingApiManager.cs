@@ -186,19 +186,14 @@ namespace SearchEverything.EverythingApi
         public IEnumerable<SearchResult> Search(string keyWord, int offset = 0, int maxCount = 100)
         {
             if (string.IsNullOrEmpty(keyWord))
-                throw new ArgumentNullException("keyWord");
+                throw new ArgumentNullException(nameof(keyWord));
 
             if (offset < 0)
-                throw new ArgumentOutOfRangeException("offset");
+                throw new ArgumentOutOfRangeException(nameof(offset));
 
             if (maxCount < 0)
-                throw new ArgumentOutOfRangeException("maxCount");
+                throw new ArgumentOutOfRangeException(nameof(maxCount));
 
-            if (keyWord.StartsWith("@"))
-            {
-                Everything_SetRegex(true);
-                keyWord = keyWord.Substring(1);
-            }
             Everything_SetSearchW(keyWord);
             Everything_SetOffset(offset);
             Everything_SetMax(maxCount);
