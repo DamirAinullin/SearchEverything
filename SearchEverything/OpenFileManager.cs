@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.IO;
 using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Shell;
@@ -29,7 +30,7 @@ namespace SearchEverything
             return _instance;
         }
 
-        public IVsWindowFrame OpenDocumentInNewWindow(string filePath)
+        public IVsWindowFrame OpenFileInVisualStudio(string filePath)
         {
             if (string.IsNullOrEmpty(filePath) || !File.Exists(filePath))
             {
@@ -48,6 +49,20 @@ namespace SearchEverything
 
             frame?.Show();
             return frame;
+        }
+
+        public void OpenFileInExplorer(string filePath)
+        {
+            if (!File.Exists(filePath))
+            {
+                return;
+            }
+
+            // combine the arguments together
+            // it doesn't matter if there is a space after ','
+            string argument = "/select, \"" + filePath + "\"";
+
+            Process.Start("explorer.exe", argument);
         }
     }
 }

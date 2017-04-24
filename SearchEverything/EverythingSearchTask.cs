@@ -23,6 +23,7 @@ namespace SearchEverything
             // Get the search options.
             bool matchCase = _searchWindow.MatchCaseOption.Value;
             bool useRegex = _searchWindow.UseRegexOption.Value;
+            bool includeFolders = _searchWindow.IncludeFolders.Value;
 
             // Set variables that are used in the finally block.
             uint resultCount = 0;
@@ -36,7 +37,8 @@ namespace SearchEverything
                     var everythingApiManager = new EverythingApiManager
                     {
                         MatchCase = matchCase,
-                        EnableRegex = useRegex
+                        EnableRegex = useRegex,
+                        IncludeFolders = includeFolders
                     };
                     contentItems = everythingApiManager.Search(SearchQuery.SearchString).ToList();
                     resultCount = (uint)contentItems.Count;

@@ -6,6 +6,7 @@
 
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
+using EnvDTE;
 using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Shell;
 using SearchEverything.EverythingApi;
@@ -38,7 +39,7 @@ namespace SearchEverything
     [ProvideMenuResource("Menus.ctmenu", 1)]
     [Guid(PackageGuidString)]
     [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "pkgdef, VS and vsixmanifest are valid VS terms")]
-    [ProvideToolWindow(typeof(SearchWindow), Style = VsDockStyle.none)]
+    [ProvideToolWindow(typeof(SearchWindow), Style = VsDockStyle.Tabbed, Window = Constants.vsWindowKindSolutionExplorer)]
     public sealed class CommandPackage : Package
     {
         /// <summary>

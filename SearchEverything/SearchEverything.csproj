@@ -73,10 +73,15 @@
     <Compile Include="Status.cs" />
     <Compile Include="SearchWindow.cs" />
     <Compile Include="EverythingSearchTask.cs" />
+    <Compile Include="ZeroCollapsedNonZeroVisible.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Everything\x64\Everything.lng" />
-    <None Include="Everything\x86\Everything.lng" />
+    <Content Include="Everything\x64\Everything.lng">
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="Everything\x86\Everything.lng">
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
     <None Include="Key.snk" />
     <None Include="packages.config" />
     <None Include="source.extension.vsixmanifest">
@@ -87,12 +92,103 @@
     <VSCTCompile Include="CommandPackage.vsct">
       <ResourceName>Menus.ctmenu</ResourceName>
     </VSCTCompile>
-    <Content Include="Everything\x64\Everything.dll" />
-    <Content Include="Everything\x64\Everything.exe" />
-    <Content Include="Everything\x86\Everything.dll" />
-    <Content Include="Everything\x86\Everything.exe" />
+    <Content Include="Everything\x64\Everything.dll">
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="Everything\x64\Everything.exe">
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="Everything\x86\Everything.dll">
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="Everything\x86\Everything.exe">
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
     <Content Include="Resources\Command.png" />
     <Content Include="Resources\CommandPackage.ico" />
+    <Resource Include="Resources\Icons\actionscript.png" />
+    <Resource Include="Resources\Icons\ansible.png" />
+    <Resource Include="Resources\Icons\applescript.png" />
+    <Resource Include="Resources\Icons\babel.png" />
+    <Resource Include="Resources\Icons\balsamiq.png" />
+    <Resource Include="Resources\Icons\clojure.png" />
+    <Resource Include="Resources\Icons\cobol.png" />
+    <Resource Include="Resources\Icons\coldfusion.png" />
+    <Resource Include="Resources\Icons\csslint.png" />
+    <Resource Include="Resources\Icons\d.png" />
+    <Resource Include="Resources\Icons\dart.png" />
+    <Resource Include="Resources\Icons\default.png" />
+    <Resource Include="Resources\Icons\delphi.png" />
+    <Resource Include="Resources\Icons\editorconfig.png" />
+    <Resource Include="Resources\Icons\elixir.png" />
+    <Resource Include="Resources\Icons\elm.png" />
+    <Resource Include="Resources\Icons\erb.png" />
+    <Resource Include="Resources\Icons\erlang.png" />
+    <Resource Include="Resources\Icons\eslint.png" />
+    <Resource Include="Resources\Icons\flash.png" />
+    <Resource Include="Resources\Icons\flow.png" />
+    <Resource Include="Resources\Icons\fortran.png" />
+    <Resource Include="Resources\Icons\foxpro.png" />
+    <Resource Include="Resources\Icons\go.png" />
+    <Resource Include="Resources\Icons\gradle.png" />
+    <Resource Include="Resources\Icons\groovy.png" />
+    <Resource Include="Resources\Icons\haml.png" />
+    <Resource Include="Resources\Icons\handlebars.png" />
+    <Resource Include="Resources\Icons\haskell.png" />
+    <Resource Include="Resources\Icons\haxe.png" />
+    <Resource Include="Resources\Icons\idris.png" />
+    <Resource Include="Resources\Icons\jade.png" />
+    <Resource Include="Resources\Icons\jshint.png" />
+    <Resource Include="Resources\Icons\julia.png" />
+    <Resource Include="Resources\Icons\latex.png" />
+    <Resource Include="Resources\Icons\lime.png" />
+    <Resource Include="Resources\Icons\lisp.png" />
+    <Resource Include="Resources\Icons\lua.png" />
+    <Resource Include="Resources\Icons\matlab.png" />
+    <Resource Include="Resources\Icons\mustache.png" />
+    <Resource Include="Resources\Icons\neo4j.png" />
+    <Resource Include="Resources\Icons\nim.png" />
+    <Resource Include="Resources\Icons\nunjucks.png" />
+    <Resource Include="Resources\Icons\ocaml.png" />
+    <Resource Include="Resources\Icons\paket.png" />
+    <Resource Include="Resources\Icons\patch.png" />
+    <Resource Include="Resources\Icons\pdf.png" />
+    <Resource Include="Resources\Icons\perl.png" />
+    <Resource Include="Resources\Icons\photoshop.png" />
+    <Resource Include="Resources\Icons\plantuml.png" />
+    <Resource Include="Resources\Icons\poedit.png" />
+    <Resource Include="Resources\Icons\proto.png" />
+    <Resource Include="Resources\Icons\puppet.png" />
+    <Resource Include="Resources\Icons\qt.png" />
+    <Resource Include="Resources\Icons\r.png" />
+    <Resource Include="Resources\Icons\raml.png" />
+    <Resource Include="Resources\Icons\rust.png" />
+    <Resource Include="Resources\Icons\scala.png" />
+    <Resource Include="Resources\Icons\scheme.png" />
+    <Resource Include="Resources\Icons\solidity.png" />
+    <Resource Include="Resources\Icons\sqlite.png" />
+    <Resource Include="Resources\Icons\stylelint.png" />
+    <Resource Include="Resources\Icons\swift.png" />
+    <Resource Include="Resources\Icons\tcl.png" />
+    <Resource Include="Resources\Icons\twig.png" />
+    <Resource Include="Resources\Icons\volt.png" />
+    <Resource Include="Resources\Icons\zip.png" />
+    <Resource Include="Resources\Icons\csharp.png" />
+    <Resource Include="Resources\Icons\csproj.png" />
+    <Resource Include="Resources\Icons\cplusplus.png" />
+    <Resource Include="Resources\Icons\javascript.png" />
+    <Resource Include="Resources\Icons\python.png" />
+    <Resource Include="Resources\Icons\typescript.png" />
+    <Resource Include="Resources\Icons\css.png" />
+    <Resource Include="Resources\Icons\html.png" />
+    <Resource Include="Resources\Icons\dll.png" />
+    <Resource Include="Resources\Icons\json.png" />
+    <Resource Include="Resources\Icons\text.png" />
+    <Resource Include="Resources\Icons\image.png" />
+    <Resource Include="Resources\Icons\visualbasic.png" />
+    <Resource Include="Resources\Icons\fsharp.png" />
+    <Content Include="Resources\Icons\excel.png" />
+    <Content Include="Resources\Icons\word.png" />
     <Content Include="Resources\ToolWindow1Command.png" />
   </ItemGroup>
   <ItemGroup>
@@ -248,6 +344,11 @@
       <InProject>false</InProject>
     </_CopyItemsX64>
   </ItemGroup>
+  <ItemGroup>
+    <_CopyItemsIcons Include="Resources\Icons\*.*">
+      <InProject>false</InProject>
+    </_CopyItemsIcons>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(VSToolsPath)\VSSDK\Microsoft.VsSDK.targets" Condition="'$(VSToolsPath)' != ''" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
@@ -268,5 +369,6 @@
   <Target Name="AfterBuild">
     <Copy SourceFiles="@(_CopyItemsX86)" DestinationFolder="$(OutputPath)\Everything\x86" />
     <Copy SourceFiles="@(_CopyItemsX64)" DestinationFolder="$(OutputPath)\Everything\x64" />
+    <Copy SourceFiles="@(_CopyItemsIcons)" DestinationFolder="$(OutputPath)\Resources\Icons" />
   </Target>
 </Project>

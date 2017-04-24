@@ -46,14 +46,15 @@ namespace SearchEverything
         public override IVsSearchTask CreateSearch(uint dwCookie, IVsSearchQuery pSearchQuery, IVsSearchCallback pSearchCallback)
         {
             if (pSearchQuery == null || pSearchCallback == null)
+            {
                 return null;
+            }
             return new EverythingSearchTask(dwCookie, pSearchQuery, pSearchCallback, this);
         }
 
         public override void ClearSearch()
         {
             SearchBox control = (SearchBox)Content;
-            //control.SearchResultsTextBox.Text = "";
             control.ResultListBox.ItemsSource = null;
         }
 
@@ -70,17 +71,21 @@ namespace SearchEverything
             {
                 if (_optionsEnum == null)
                 {
-                    var list = new List<IVsWindowSearchOption> {MatchCaseOption, UseRegexOption};
+                    var list = new List<IVsWindowSearchOption> {MatchCaseOption, UseRegexOption, IncludeFolders};
                     _optionsEnum = new WindowSearchOptionEnumerator(list);
                 }
                 return _optionsEnum;
             }
         }
+        private WindowSearchBooleanOption _includeFolders;
+        public WindowSearchBooleanOption IncludeFolders =>
+            _includeFolders ?? (_includeFolders =
+                new WindowSearchBooleanOption("Include folders", "Include folders", false));
 
         private WindowSearchBooleanOption _matchCaseOption;
         public WindowSearchBooleanOption MatchCaseOption =>
             _matchCaseOption ?? (_matchCaseOption =
-            new WindowSearchBooleanOption("Match case", "Match case", false));
+                new WindowSearchBooleanOption("Match case", "Match case", false));
 
         private WindowSearchBooleanOption _useRegexOption;
         public WindowSearchBooleanOption UseRegexOption =>
