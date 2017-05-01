@@ -51,18 +51,27 @@ namespace SearchEverything
             return frame;
         }
 
-        public void OpenFileInExplorer(string filePath)
+        public void OpenFileInExplorer(string fullPath)
         {
-            if (!File.Exists(filePath))
+            if (!File.Exists(fullPath) && !Directory.Exists(fullPath))
             {
                 return;
             }
 
             // combine the arguments together
             // it doesn't matter if there is a space after ','
-            string argument = "/select, \"" + filePath + "\"";
+            string argument = "/select, \"" + fullPath + "\"";
 
             Process.Start("explorer.exe", argument);
+        }
+
+        public void OpenInDefaultProgram(string fullPath)
+        {
+            if (!File.Exists(fullPath) && !Directory.Exists(fullPath))
+            {
+                return;
+            }
+            Process.Start(fullPath);
         }
     }
 }

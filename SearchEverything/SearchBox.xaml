@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:searchEverything="clr-namespace:SearchEverything"
              mc:Ignorable="d"
-             d:DesignHeight="300" d:DesignWidth="300">
+             d:DesignHeight="300" d:DesignWidth="300" SizeChanged="UserControl_SizeChanged">
     <UserControl.Resources>
         <searchEverything:ZeroCollapsedNonZeroVisible x:Key="hideListBox"/>
     </UserControl.Resources>
@@ -19,14 +19,15 @@
                                 <ContextMenu>
                                     <MenuItem Header="Open in Visual Studio" Click="OpenInVisualStudio_Click" CommandParameter="{Binding RelativeSource={RelativeSource Self}, Path=Parent}"/>
                                     <MenuItem Header="Open Containing Folder" Click="OpenContainingFolder_Click" CommandParameter="{Binding RelativeSource={RelativeSource Self}, Path=Parent}"/>
+                                    <MenuItem Header="Open in Default Program" Click="OpenInDefaultProgram_Click" CommandParameter="{Binding RelativeSource={RelativeSource Self}, Path=Parent}"/>
                                 </ContextMenu>
                             </Grid.ContextMenu>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition></ColumnDefinition>
                                 <ColumnDefinition></ColumnDefinition>
                             </Grid.ColumnDefinitions>
-                            <Image Grid.Column="0" RenderOptions.BitmapScalingMode="HighQuality" Height="16" Width="16" Margin="3,0" Source="{Binding IconPath}"/>
-                            <TextBlock Grid.Column="1" Text="{Binding ShowPath}" MouseLeftButtonDown="TextBlock_MouseLeftButtonDown" TextAlignment="Right"/>
+                            <Image Grid.Column="0" RenderOptions.BitmapScalingMode="HighQuality" Height="16" Width="16" Margin="3,0" Source="{Binding ImageSource}"/>
+                            <TextBlock Grid.Column="1" Text="{Binding ShowPath, UpdateSourceTrigger=PropertyChanged}" MouseLeftButtonDown="TextBlock_MouseLeftButtonDown" TextAlignment="Right"/>
                         </Grid>
                     </DataTemplate>
                 </ListBox.ItemTemplate>

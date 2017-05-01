@@ -2,8 +2,8 @@ namespace SearchEverything.EverythingApi
 {
     public enum ResultType
     {
-        Volume,
+        File,
         Folder,
-        File
+        Volume
     }
 }

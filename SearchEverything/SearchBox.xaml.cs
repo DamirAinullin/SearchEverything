@@ -1,6 +1,8 @@
-﻿using System.Windows;
+﻿using System.IO;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using SearchEverything.EverythingApi;
 
 namespace SearchEverything
 {
@@ -23,7 +25,15 @@ namespace SearchEverything
             if (e.ClickCount == 2)
             {
                 string fullPath = ((Grid)((TextBlock)sender).Parent).ToolTip.ToString();
-                OpenFileManager.GetInstance().OpenFileInVisualStudio(fullPath);
+                var openFileManager = OpenFileManager.GetInstance();
+                if (Directory.Exists(fullPath))
+                {
+                    openFileManager.OpenFileInExplorer(fullPath);
+                }
+                else
+                {
+                    openFileManager.OpenFileInVisualStudio(fullPath);
+                }
             }
         }
 
@@ -66,6 +76,46 @@ namespace SearchEverything
             }
             string fullPath = grid.ToolTip.ToString();
             OpenFileManager.GetInstance().OpenFileInExplorer(fullPath);
+        }
+
+        private void OpenInDefaultProgram_Click(object sender, RoutedEventArgs e)
+        {
+            MenuItem menuItem = sender as MenuItem;
+            if (menuItem == null)
+            {
+                return;
+            }
+            ContextMenu parentContextMenu = menuItem.CommandParameter as ContextMenu;
+            var grid = parentContextMenu?.PlacementTarget as Grid;
+            if (grid == null)
+            {
+                return;
+            }
+            string fullPath = grid.ToolTip.ToString();
+            OpenFileManager.GetInstance().OpenInDefaultProgram(fullPath);
+        }
+
+        private void UserControl_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            if (!e.WidthChanged)
+            {
+                return;
+            }
+            if (ResultListBox.ItemsSource == null)
+            {
+                return;
+            }
+            var textWidthManager = new TextWidthManager();
+            foreach (SearchResult item in ResultListBox.ItemsSource)
+            {
+                var searchBoxInfo = new SearchBoxInfo
+                {
+                    Width = e.NewSize.Width,
+                    FontSize = ResultListBox.FontSize,
+                    FontName = ResultListBox.FontFamily.ToString()
+                };
+                item.ShowPath = textWidthManager.GetSubStringForWidth(item.FullPath, searchBoxInfo);
+            }
         }
     }
 }

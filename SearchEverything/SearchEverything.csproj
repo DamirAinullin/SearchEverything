@@ -55,6 +55,7 @@
     <Compile Include="CommandPackage.cs" />
     <Compile Include="EverythingApi\EverythingApiManager.cs" />
     <Compile Include="EverythingApi\EverythingManager.cs" />
+    <Compile Include="EverythingApi\EverythingNativeApi.cs" />
     <Compile Include="EverythingApi\Exceptions\CreateThreadException.cs" />
     <Compile Include="EverythingApi\Exceptions\CreateWindowException.cs" />
     <Compile Include="EverythingApi\Exceptions\InvalidCallException.cs" />
@@ -62,8 +63,14 @@
     <Compile Include="EverythingApi\Exceptions\IPCErrorException.cs" />
     <Compile Include="EverythingApi\Exceptions\MemoryErrorException.cs" />
     <Compile Include="EverythingApi\Exceptions\RegisterClassExException.cs" />
+    <Compile Include="IconManager.cs" />
     <Compile Include="EverythingApi\ResultType.cs" />
     <Compile Include="EverythingApi\SearchResult.cs" />
+    <Compile Include="SearchBoxInfo.cs" />
+    <Compile Include="Shell32.cs" />
+    <Compile Include="EverythingApi\StateCode.cs" />
+    <Compile Include="TextWidthManager.cs" />
+    <Compile Include="User32.cs" />
     <Compile Include="OpenFileManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SearchBox.xaml.cs">
@@ -187,8 +194,11 @@
     <Resource Include="Resources\Icons\image.png" />
     <Resource Include="Resources\Icons\visualbasic.png" />
     <Resource Include="Resources\Icons\fsharp.png" />
-    <Content Include="Resources\Icons\excel.png" />
-    <Content Include="Resources\Icons\word.png" />
+    <Resource Include="Resources\Icons\excel.png" />
+    <Resource Include="Resources\Icons\folder.png" />
+    <Resource Include="Resources\Icons\word.png" />
+    <Resource Include="Resources\Icons\xml.png" />
+    <Resource Include="Resources\Icons\java.png" />
     <Content Include="Resources\ToolWindow1Command.png" />
   </ItemGroup>
   <ItemGroup>
