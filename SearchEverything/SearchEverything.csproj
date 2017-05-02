@@ -199,6 +199,7 @@
     <Resource Include="Resources\Icons\word.png" />
     <Resource Include="Resources\Icons\xml.png" />
     <Resource Include="Resources\Icons\java.png" />
+    <Resource Include="Resources\Icons\mp3.png" />
     <Content Include="Resources\ToolWindow1Command.png" />
   </ItemGroup>
   <ItemGroup>

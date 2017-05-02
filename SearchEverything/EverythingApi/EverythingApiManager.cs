@@ -1,14 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Text;
+using System.Threading;
 using SearchEverything.EverythingApi.Exceptions;
 
 namespace SearchEverything.EverythingApi
 {
     public sealed class EverythingApiManager
     {
+        private const int BufferSize = 4096;
         private readonly TextWidthManager _textWidthManager = new TextWidthManager();
-
+        private static int _maxCount;
         /// <summary>
         /// Gets or sets a value indicating whether [match path].
         /// </summary>
@@ -87,24 +88,20 @@ namespace SearchEverything.EverythingApi
         /// Searches the specified key word.
         /// </summary>
         /// <param name="keyWord">The key word.</param>
-        /// <param name="width">Possible width for showing path.</param>
-        /// <param name="offset">The offset.</param>
+        /// <param name="token"></param>
         /// <param name="maxCount">The max count.</param>
+        /// <param name="searchBoxInfo"></param>
         /// <returns></returns>
-        public List<SearchResult> Search(string keyWord, SearchBoxInfo searchBoxInfo, int offset = 0, int maxCount = 100)
+        public List<SearchResult> Search(string keyWord, SearchBoxInfo searchBoxInfo, CancellationToken token, int maxCount = 100)
         {
-            if (string.IsNullOrEmpty(keyWord))
-                throw new ArgumentNullException(nameof(keyWord));
-
-            if (offset < 0)
-                throw new ArgumentOutOfRangeException(nameof(offset));
-
-            if (maxCount < 0)
-                throw new ArgumentOutOfRangeException(nameof(maxCount));
-
             EverythingNativeApi.Everything_SetSearchW((IncludeFolders ? "" : "file:") + keyWord);
-            EverythingNativeApi.Everything_SetOffset(offset);
-            EverythingNativeApi.Everything_SetMax(maxCount);
+            if (_maxCount != maxCount)
+            {
+                EverythingNativeApi.Everything_SetMax(maxCount);
+                _maxCount = maxCount;
+            }
+
+            token.ThrowIfCancellationRequested();
 
             if (!EverythingNativeApi.Everything_QueryW(true))
             {
@@ -127,13 +124,14 @@ namespace SearchEverything.EverythingApi
                 }
             }
 
-            const int bufferSize = 4096;
-            StringBuilder buffer = new StringBuilder(bufferSize);
+            token.ThrowIfCancellationRequested();
+
+            var buffer = new StringBuilder(BufferSize);
             var everythingGetNumResults = EverythingNativeApi.Everything_GetNumResults();
             var resultList = new List<SearchResult>(everythingGetNumResults);
             for (int idx = 0; idx < everythingGetNumResults; ++idx)
             {
-                EverythingNativeApi.Everything_GetResultFullPathNameW(idx, buffer, bufferSize);
+                EverythingNativeApi.Everything_GetResultFullPathNameW(idx, buffer, BufferSize);
 
                 var fullPath = buffer.ToString();
                 var result = new SearchResult
@@ -141,17 +139,16 @@ namespace SearchEverything.EverythingApi
                     FullPath = fullPath,
                     ShowPath = _textWidthManager.GetSubStringForWidth(fullPath, searchBoxInfo)
                 };
-
-                if (EverythingNativeApi.Everything_IsFolderResult(idx))
-                {
-                    result.Type = ResultType.Folder;
-                }
-                else if (EverythingNativeApi.Everything_IsFileResult(idx))
-                {
-                    result.Type = ResultType.File;
-                }
                 result.ImageSource = IconManager.GetImageSource(result.FullPath, result.Type);
+                if (IncludeFolders)
+                {
+                    result.Type = EverythingNativeApi.Everything_IsFolderResult(idx)
+                        ? ResultType.Folder
+                        : ResultType.File;
+                }
                 resultList.Add(result);
+
+                token.ThrowIfCancellationRequested();
             }
             return resultList;
         }

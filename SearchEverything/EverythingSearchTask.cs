@@ -1,15 +1,19 @@
 using System;
 using System.Collections.Generic;
+using System.Threading;
 using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
 using SearchEverything.EverythingApi;
+using Tasks = System.Threading.Tasks;
 
 namespace SearchEverything
 {
     public class EverythingSearchTask : VsSearchTask
     {
         private static readonly object SyncRoot = new object();
+        private static Tasks.Task _task;
+        private static CancellationTokenSource _cancellationTokenSource;
         private readonly SearchWindow _searchWindow;
         private SearchBoxInfo _searchBoxInfo;
 
@@ -41,35 +45,59 @@ namespace SearchEverything
             uint resultCount = 0;
             ErrorCode = VSConstants.S_OK;
             List<SearchResult> contentItems = null;
+
+            if (_task != null && (!_task.IsCompleted || _task.Status == Tasks.TaskStatus.Running ||
+                _task.Status == Tasks.TaskStatus.WaitingToRun || _task.Status == Tasks.TaskStatus.WaitingForActivation))
+            {
+                _cancellationTokenSource.Cancel();
+            }
             lock (SyncRoot)
             {
+                _cancellationTokenSource = new CancellationTokenSource();
+                _task = Tasks.Task.Factory.StartNew(() =>
+                {
+                    try
+                    {
+                        // Determine the results.
+                        var everythingApiManager = new EverythingApiManager
+                        {
+                            MatchCase = matchCase,
+                            EnableRegex = useRegex,
+                            IncludeFolders = includeFolders
+                        };
+
+                        _cancellationTokenSource.Token.ThrowIfCancellationRequested();
+
+                        contentItems = everythingApiManager.Search(SearchQuery.SearchString, _searchBoxInfo, _cancellationTokenSource.Token);
+
+                        resultCount = (uint)contentItems.Count;
+                        SearchCallback.ReportComplete(this, resultCount);
+                    }
+                    catch (Exception e)
+                    {
+                        ErrorCode = VSConstants.E_FAIL;
+                    }
+                    finally
+                    {
+                        ThreadHelper.Generic.Invoke(() =>
+                        {
+                            if (contentItems != null)
+                            {
+                                var resultListBox = ((SearchBox)_searchWindow.Content).ResultListBox;
+                                resultListBox.ItemsSource = contentItems;
+                            }
+                        });
+
+                        SearchResults = resultCount;
+                    }
+                }, _cancellationTokenSource.Token);
                 try
                 {
-                    // Determine the results. 
-                    var everythingApiManager = new EverythingApiManager
-                    {
-                        MatchCase = matchCase,
-                        EnableRegex = useRegex,
-                        IncludeFolders = includeFolders
-                    };
-                    contentItems = everythingApiManager.Search(SearchQuery.SearchString, _searchBoxInfo);
-                    resultCount = (uint) contentItems.Count;
-
-                    //SearchCallback.ReportProgress(this, progress++, (uint)contentArr.GetLength(0));
+                    _task.Wait(_cancellationTokenSource.Token);
                 }
-                catch (Exception e)
+                catch (OperationCanceledException)
                 {
-                    ErrorCode = VSConstants.E_FAIL;
-                }
-                finally
-                {
-                    ThreadHelper.Generic.Invoke(() =>
-                    {
-                        var resultListBox = ((SearchBox) _searchWindow.Content).ResultListBox;
-                        resultListBox.ItemsSource = contentItems;
-                    });
-
-                    SearchResults = resultCount;
+                    //
                 }
             }
             // Call the implementation of this method in the base class. 
