@@ -17,6 +17,8 @@ namespace SearchEverything
         private readonly SearchWindow _searchWindow;
         private SearchBoxInfo _searchBoxInfo;
 
+        public static CommandPackage CommandPackage { private get; set; }
+
         public EverythingSearchTask(uint dwCookie, IVsSearchQuery pSearchQuery,
             IVsSearchCallback pSearchCallback, SearchWindow searchWindow)
             : base(dwCookie, pSearchQuery, pSearchCallback)
@@ -68,7 +70,8 @@ namespace SearchEverything
 
                         _cancellationTokenSource.Token.ThrowIfCancellationRequested();
 
-                        contentItems = everythingApiManager.Search(SearchQuery.SearchString, _searchBoxInfo, _cancellationTokenSource.Token);
+                        contentItems = everythingApiManager.Search(SearchQuery.SearchString,
+                            _searchBoxInfo, _cancellationTokenSource.Token, CommandPackage.MaxNumberOfResults);
 
                         resultCount = (uint)contentItems.Count;
                         SearchCallback.ReportComplete(this, resultCount);

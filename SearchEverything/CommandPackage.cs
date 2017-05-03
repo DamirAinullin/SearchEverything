@@ -40,8 +40,18 @@ namespace SearchEverything
     [Guid(PackageGuidString)]
     [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "pkgdef, VS and vsixmanifest are valid VS terms")]
     [ProvideToolWindow(typeof(SearchWindow), Style = VsDockStyle.Tabbed, Window = Constants.vsWindowKindSolutionExplorer)]
+    [ProvideOptionPage(typeof(GeneralOptionPage), "Search Everything", "General", 0, 0, true)]
     public sealed class CommandPackage : Package
     {
+        public int MaxNumberOfResults
+        {
+            get
+            {
+                GeneralOptionPage page = (GeneralOptionPage)GetDialogPage(typeof(GeneralOptionPage));
+                return (int)page.MaxNumberOfResults;
+            }
+        }
+
         /// <summary>
         /// CommandPackage GUID string.
         /// </summary>
@@ -86,6 +96,7 @@ namespace SearchEverything
 
             var everythingManager = new EverythingManager();
             everythingManager.Init();
+            EverythingSearchTask.CommandPackage = this;
         }
 
         #endregion

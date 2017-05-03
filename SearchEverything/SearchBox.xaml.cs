@@ -16,7 +16,6 @@ namespace SearchEverything
         public SearchBox()
         {
             InitializeComponent();
-
             ResultListBox = RListBox;
         }
 

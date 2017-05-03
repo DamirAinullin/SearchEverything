@@ -66,6 +66,9 @@
     <Compile Include="IconManager.cs" />
     <Compile Include="EverythingApi\ResultType.cs" />
     <Compile Include="EverythingApi\SearchResult.cs" />
+    <Compile Include="GeneralOptionPage.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="SearchBoxInfo.cs" />
     <Compile Include="Shell32.cs" />
     <Compile Include="EverythingApi\StateCode.cs" />
@@ -99,9 +102,6 @@
     <VSCTCompile Include="CommandPackage.vsct">
       <ResourceName>Menus.ctmenu</ResourceName>
     </VSCTCompile>
-    <Content Include="Everything\x64\Everything.dll">
-      <IncludeInVSIX>true</IncludeInVSIX>
-    </Content>
     <Content Include="Everything\x64\Everything.exe">
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
