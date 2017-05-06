@@ -54,14 +54,14 @@
           If you do not want an image next to your command, remove the Icon node /> -->
       <Button guid="guidSearchWindowCommandPackageCmdSet" id="SearchWindowCommandId" priority="0x0100" type="Button">
         <Parent guid="guidSearchWindowCommandPackageCmdSet" id="MyMenuGroup" />
-        <Icon guid="guidImages" id="bmpPic1" />
+        <Icon guid="guidImages" id="bmpPicSearch" />
         <Strings>
-          <ButtonText>Say HelloWorld!</ButtonText>
+          <ButtonText>Search Everything Window</ButtonText>
         </Strings>
       </Button>
       <Button guid="guidSearchWindowCommandPackageCmdSet" id="cmdidSearchWindowSearchWindowCommand" priority="0x0100" type="Button">
         <Parent guid="guidSHLMainMenu" id="IDG_VS_WNDO_OTRWNDWS1" />
-        <Icon guid="guidImages1" id="bmpPic1" />
+        <Icon guid="guidImages1" id="bmpPicSearch" />
         <Strings>
           <ButtonText>SearchWindow</ButtonText>
         </Strings>
@@ -80,7 +80,7 @@
     </Bitmaps>
   </Commands>
   <KeyBindings>
-      <KeyBinding guid="guidSearchWindowCommandPackageCmdSet" id="SearchWindowCommandId" editor="guidVSStd97" mod1="ALT" key1="0x20" />
+    <KeyBinding guid="guidSearchWindowCommandPackageCmdSet" id="SearchWindowCommandId" editor="guidVSStd97" mod1="ALT" key1="0x20" />
   </KeyBindings>
   <Symbols>
     <!-- This is the package guid. -->
@@ -101,7 +101,7 @@
       <IDSymbol name="bmpPicArrows" value="5" />
       <IDSymbol name="bmpPicStrikethrough" value="6" />
     </GuidSymbol>
-  
+
     <GuidSymbol value="{3ff6a468-465b-426d-81fa-45f405abad06}" name="guidImages1">
       <IDSymbol name="bmpPic1" value="1" />
       <IDSymbol name="bmpPic2" value="2" />

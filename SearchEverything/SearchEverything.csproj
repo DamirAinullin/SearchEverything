@@ -69,6 +69,10 @@
     <Compile Include="GeneralOptionPage.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Content Include="LICENSE.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
     <Compile Include="SearchBoxInfo.cs" />
     <Compile Include="Shell32.cs" />
     <Compile Include="EverythingApi\StateCode.cs" />
@@ -200,6 +204,10 @@
     <Resource Include="Resources\Icons\xml.png" />
     <Resource Include="Resources\Icons\java.png" />
     <Resource Include="Resources\Icons\mp3.png" />
+    <Content Include="Resources\Icons\search-everything.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
     <Content Include="Resources\ToolWindow1Command.png" />
   </ItemGroup>
   <ItemGroup>

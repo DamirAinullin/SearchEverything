@@ -3,7 +3,12 @@
   <Metadata>
     <Identity Id="SearchEverything.Damir Ainullin.dbfee868-ecc6-4017-a542-12b8b7116e13" Version="1.0" Language="en-US" Publisher="Damir Ainullin" />
     <DisplayName>SearchEverything</DisplayName>
-    <Description>Empty VSIX Project.</Description>
+    <Description xml:space="preserve">Visual Stuidio extension based on Everything search engine (https://www.voidtools.com/). You can find any file you want immediately.</Description>
+    <MoreInfo>https://github.com/DamirAinullin/SearchEverything</MoreInfo>
+    <License>LICENSE.txt</License>
+    <Icon>Resources\Icons\search-everything.png</Icon>
+    <PreviewImage>Resources\Icons\search-everything.png</PreviewImage>
+    <Tags>Everything, Search, Find, Files</Tags>
   </Metadata>
   <Installation>
     <InstallationTarget Id="Microsoft.VisualStudio.Community" Version="[14.0]" />
