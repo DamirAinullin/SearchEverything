@@ -17,7 +17,7 @@ namespace SearchEverything.Icons
     {
         private static readonly uint SizeOfShFileInfo = (uint)Marshal.SizeOf(new Shell32.SHFILEINFO());
         private static readonly Dictionary<string, ImageSource> ImageSources = new Dictionary<string, ImageSource>(25);
-        private static readonly Dictionary<string, string>  IconsByExtension = new Dictionary<string, string>
+        private static readonly Dictionary<string, string> IconsByExtension = new Dictionary<string, string>
         {
             { ".png", "image.png" }, { ".ico", "image.png" }, { ".bmp", "image.png" }, { ".jpg", "image.png" },
             { ".jpeg", "image.png" }, { ".txt", "text.png" }, { ".zip", "zip.png" }, { ".pdf", "pdf.png" },
@@ -70,7 +70,7 @@ namespace SearchEverything.Icons
             imageSource = iconPath != null ? GetBitmapImageFromResources(iconPath)
                 : ToImageSource(GetFileIcon(fullPath));
             imageSource.Freeze();
-            if (!String.IsNullOrEmpty(extension))
+            if (!String.IsNullOrEmpty(extension) && type != ResultType.Folder)
             {
                 ImageSources.Add(extension, imageSource);
             }
@@ -108,7 +108,7 @@ namespace SearchEverything.Icons
             }
             string iconName;
             if (IconsByExtension.TryGetValue(extension, out iconName) ||
-                IconsByFilename.TryGetValue(Path.GetFileName(fullPath)?.ToLower(), out iconName))
+                IconsByFilename.TryGetValue(Path.GetFileName(fullPath).ToLower(), out iconName))
             {
                 return "resources/icons/" + iconName;
             }

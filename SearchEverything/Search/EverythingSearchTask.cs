@@ -39,11 +39,6 @@ namespace SearchEverything.Search
 
         protected override void OnStartSearch()
         {
-            // Get the search options.
-            bool matchCase = _searchWindow.MatchCaseOption.Value;
-            bool useRegex = _searchWindow.UseRegexOption.Value;
-            bool includeFolders = _searchWindow.IncludeFolders.Value;
-
             // Set variables that are used in the finally block.
             uint resultCount = 0;
             ErrorCode = VSConstants.S_OK;
@@ -62,12 +57,7 @@ namespace SearchEverything.Search
                     try
                     {
                         // Determine the results.
-                        var everythingApiManager = new EverythingApiManager
-                        {
-                            MatchCase = matchCase,
-                            EnableRegex = useRegex,
-                            IncludeFolders = includeFolders
-                        };
+                        var everythingApiManager = new EverythingApiManager();
 
                         _cancellationTokenSource.Token.ThrowIfCancellationRequested();
 

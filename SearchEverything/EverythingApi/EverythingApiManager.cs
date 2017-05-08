@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading;
 using SearchEverything.EverythingApi.Exceptions;
@@ -13,79 +14,6 @@ namespace SearchEverything.EverythingApi
         private const int BufferSize = 4096;
         private readonly TextWidthManager _textWidthManager = new TextWidthManager();
         private static int _maxCount;
-        /// <summary>
-        /// Gets or sets a value indicating whether [match path].
-        /// </summary>
-        /// <value><c>true</c> if [match path]; otherwise, <c>false</c>.</value>
-        public bool MatchPath
-        {
-            get
-            {
-                return EverythingNativeApi.Everything_GetMatchPath();
-            }
-            set
-            {
-                EverythingNativeApi.Everything_SetMatchPath(value);
-            }
-        }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether [match case].
-        /// </summary>
-        /// <value><c>true</c> if [match case]; otherwise, <c>false</c>.</value>
-        public bool MatchCase
-        {
-            get
-            {
-                return EverythingNativeApi.Everything_GetMatchCase();
-            }
-            set
-            {
-                EverythingNativeApi.Everything_SetMatchCase(value);
-            }
-        }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether [match whole word].
-        /// </summary>
-        /// <value><c>true</c> if [match whole word]; otherwise, <c>false</c>.</value>
-        public bool MatchWholeWord
-        {
-            get
-            {
-                return EverythingNativeApi.Everything_GetMatchWholeWord();
-            }
-            set
-            {
-                EverythingNativeApi.Everything_SetMatchWholeWord(value);
-            }
-        }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether [enable regex].
-        /// </summary>
-        /// <value><c>true</c> if [enable regex]; otherwise, <c>false</c>.</value>
-        public bool EnableRegex
-        {
-            get
-            {
-                return EverythingNativeApi.Everything_GetRegex();
-            }
-            set
-            {
-                EverythingNativeApi.Everything_SetRegex(value);
-            }
-        }
-
-        public bool IncludeFolders { get; set; }
-
-        /// <summary>
-        /// Resets this instance.
-        /// </summary>
-        public void Reset()
-        {
-            EverythingNativeApi.Everything_Reset();
-        }
 
         /// <summary>
         /// Searches the specified key word.
@@ -95,9 +23,9 @@ namespace SearchEverything.EverythingApi
         /// <param name="maxCount">The max count.</param>
         /// <param name="searchBoxInfo"></param>
         /// <returns></returns>
-        public List<SearchResult> Search(string keyWord, SearchBoxInfo searchBoxInfo, CancellationToken token, int maxCount = 100)
+        public List<SearchResult> Search(string keyWord, SearchBoxInfo searchBoxInfo, CancellationToken token, int maxCount)
         {
-            EverythingNativeApi.Everything_SetSearchW((IncludeFolders ? "" : "file:") + keyWord);
+            EverythingNativeApi.Everything_SetSearchW(keyWord);
             if (_maxCount != maxCount)
             {
                 EverythingNativeApi.Everything_SetMax(maxCount);
@@ -108,23 +36,7 @@ namespace SearchEverything.EverythingApi
 
             if (!EverythingNativeApi.Everything_QueryW(true))
             {
-                switch (EverythingNativeApi.Everything_GetLastError())
-                {
-                    case StateCode.CreateThreadError:
-                        throw new CreateThreadException();
-                    case StateCode.CreateWindowError:
-                        throw new CreateWindowException();
-                    case StateCode.InvalidCallError:
-                        throw new InvalidCallException();
-                    case StateCode.InvalidIndexError:
-                        throw new InvalidIndexException();
-                    case StateCode.IPCError:
-                        throw new IPCErrorException();
-                    case StateCode.MemoryError:
-                        throw new MemoryErrorException();
-                    case StateCode.RegisterClassExError:
-                        throw new RegisterClassExException();
-                }
+                GetLastError();
             }
 
             token.ThrowIfCancellationRequested();
@@ -141,21 +53,40 @@ namespace SearchEverything.EverythingApi
                 var result = new SearchResult
                 {
                     FullPath = fullPath,
-                    ShowPath = _textWidthManager.GetSubStringForWidth(fullPath, searchBoxInfo)
-                };
-                if (IncludeFolders)
-                {
-                    result.Type = EverythingNativeApi.Everything_IsFolderResult(idx)
+                    ShowPath = _textWidthManager.GetSubStringForWidth(fullPath, searchBoxInfo),
+                    Type = EverythingNativeApi.Everything_IsFolderResult(idx)
                         ? ResultType.Folder
-                        : ResultType.File;
-                }
+                        : ResultType.File
+                };
+
                 result.ImageSource = IconManager.GetImageSource(result.FullPath, result.Type);
                 
                 resultList.Add(result);
 
                 token.ThrowIfCancellationRequested();
             }
-            return resultList;
+            return resultList.OrderBy(item => item.Type).ToList();
+        }
+
+        private void GetLastError()
+        {
+            switch (EverythingNativeApi.Everything_GetLastError())
+            {
+                case StateCode.CreateThreadError:
+                    throw new CreateThreadException();
+                case StateCode.CreateWindowError:
+                    throw new CreateWindowException();
+                case StateCode.InvalidCallError:
+                    throw new InvalidCallException();
+                case StateCode.InvalidIndexError:
+                    throw new InvalidIndexException();
+                case StateCode.IPCError:
+                    throw new IPCErrorException();
+                case StateCode.MemoryError:
+                    throw new MemoryErrorException();
+                case StateCode.RegisterClassExError:
+                    throw new RegisterClassExException();
+            }
         }
     }
 }

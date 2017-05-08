@@ -63,33 +63,18 @@ namespace SearchEverything.Search
             Microsoft.Internal.VisualStudio.PlatformUI.Utilities.SetValue(pSearchSettings, SearchSettingsDataSource.SearchProgressTypeProperty.Name, (uint)VSSEARCHPROGRESSTYPE.SPT_DETERMINATE);
         }
 
-        private IVsEnumWindowSearchOptions _optionsEnum;
-        public override IVsEnumWindowSearchOptions SearchOptionsEnum
+        public override IVsEnumWindowSearchFilters SearchFiltersEnum
         {
             get
             {
-                if (_optionsEnum == null)
+                var list = new List<IVsWindowSearchFilter>(EverythingWindowSearchFilter.Expressions.Count);
+                foreach (var expression in EverythingWindowSearchFilter.Expressions)
                 {
-                    var list = new List<IVsWindowSearchOption> {MatchCaseOption, UseRegexOption, IncludeFolders};
-                    _optionsEnum = new WindowSearchOptionEnumerator(list);
+                    list.Add(new EverythingWindowSearchFilter(expression.Key, expression.Key));
                 }
-                return _optionsEnum;
+                return new WindowSearchFilterEnumerator(list);
             }
         }
-        private WindowSearchBooleanOption _includeFolders;
-        public WindowSearchBooleanOption IncludeFolders =>
-            _includeFolders ?? (_includeFolders =
-                new WindowSearchBooleanOption("Include folders", "Include folders", false));
-
-        private WindowSearchBooleanOption _matchCaseOption;
-        public WindowSearchBooleanOption MatchCaseOption =>
-            _matchCaseOption ?? (_matchCaseOption =
-                new WindowSearchBooleanOption("Match case", "Match case", false));
-
-        private WindowSearchBooleanOption _useRegexOption;
-        public WindowSearchBooleanOption UseRegexOption =>
-            _useRegexOption ?? (_useRegexOption =
-                new WindowSearchBooleanOption("Use regular expressions", "Use regular expressions", false));
     }
 }
 
