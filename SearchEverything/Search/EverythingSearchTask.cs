@@ -4,10 +4,11 @@ using System.Threading;
 using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
+using SearchEverything.Controls;
 using SearchEverything.EverythingApi;
 using Tasks = System.Threading.Tasks;
 
-namespace SearchEverything
+namespace SearchEverything.Search
 {
     public class EverythingSearchTask : VsSearchTask
     {

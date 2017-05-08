@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
+using System.Reflection;
+using System.Resources;
 using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Interop;
@@ -9,7 +11,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using SearchEverything.EverythingApi;
 
-namespace SearchEverything
+namespace SearchEverything.Icons
 {
     public static class IconManager
     {
@@ -65,7 +67,7 @@ namespace SearchEverything
             }
 
             string iconPath = GetIconPath(fullPath, extension, type);
-            imageSource = iconPath != null ? new BitmapImage(new Uri(iconPath, UriKind.Relative))
+            imageSource = iconPath != null ? GetBitmapImageFromResources(iconPath)
                 : ToImageSource(GetFileIcon(fullPath));
             imageSource.Freeze();
             if (!String.IsNullOrEmpty(extension))
@@ -75,21 +77,40 @@ namespace SearchEverything
             return imageSource;
         }
 
+        private static ImageSource GetBitmapImageFromResources(string iconPath)
+        {
+            var resourceManager = new ResourceManager("SearchEverything.g", Assembly.GetExecutingAssembly());
+            using (var stream = (MemoryStream)resourceManager.GetObject(iconPath))
+            {
+                return ConvertToBitmapImage(stream);
+            }
+        }
+
+        private static BitmapImage ConvertToBitmapImage(MemoryStream stream)
+        {
+            var bitmap = new BitmapImage();
+            bitmap.BeginInit();
+            bitmap.StreamSource = stream;
+            bitmap.CacheOption = BitmapCacheOption.OnLoad;
+            bitmap.EndInit();
+            return bitmap;
+        }
+
         private static string GetIconPath(string fullPath, string extension, ResultType type)
         {
             if (type == ResultType.Folder)
             {
-                return "Resources/Icons/folder.png";
+                return "resources/icons/folder.png";
             }
             if (String.IsNullOrEmpty(extension))
             {
-                return "Resources/Icons/default.png";
+                return "resources/icons/default.png";
             }
             string iconName;
             if (IconsByExtension.TryGetValue(extension, out iconName) ||
                 IconsByFilename.TryGetValue(Path.GetFileName(fullPath)?.ToLower(), out iconName))
             {
-                return "Resources/Icons/" + iconName;
+                return "resources/icons/" + iconName;
             }
             return null;
         }

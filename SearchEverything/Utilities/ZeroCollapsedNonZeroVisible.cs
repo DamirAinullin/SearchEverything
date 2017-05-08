@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Globalization;
-using System.Windows.Data;
 using System.Windows;
+using System.Windows.Data;
 
-namespace SearchEverything
+namespace SearchEverything.Utilities
 {
     public class ZeroCollapsedNonZeroVisible : IValueConverter
     {

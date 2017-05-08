@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel;
 using Microsoft.VisualStudio.Shell;
 
-namespace SearchEverything
+namespace SearchEverything.Options
 {
     public class GeneralOptionPage : DialogPage
     {

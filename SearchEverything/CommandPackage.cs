@@ -1,15 +1,13 @@
-﻿//------------------------------------------------------------------------------
-// <copyright file="CommandPackage.cs" company="Company">
-//     Copyright (c) Company.  All rights reserved.
-// </copyright>
-//------------------------------------------------------------------------------
-
-using System.Diagnostics.CodeAnalysis;
+﻿using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
 using EnvDTE;
 using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Shell;
 using SearchEverything.EverythingApi;
+using SearchEverything.Options;
+using SearchEverything.Search;
+using SearchEverything.Utilities;
+using Command = SearchEverything.Search.Command;
 
 namespace SearchEverything
 {
@@ -58,7 +56,7 @@ namespace SearchEverything
         public const string PackageGuidString = "b4f3731f-969e-475d-a681-61e553b15a9c";
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Command"/> class.
+        /// Initializes a new instance of the <see cref="Search.Command"/> class.
         /// </summary>
         public CommandPackage()
         {
@@ -81,24 +79,36 @@ namespace SearchEverything
 
             OpenFileManager.CreateInstance(this);
 
-            var everythingServiceManager = new EverythingServiceManager();
+            var extensionUtility = new ExtensionUtility(typeof(CommandPackage));
+            string extensionPath = extensionUtility.GetExtensionPath();
+            var everythingServiceManager = new EverythingProcessManager(extensionPath);
 
+            bool serviceIsStartedNow = false;
             if (!everythingServiceManager.IsServiceInstalled())
             {
                 everythingServiceManager.InstallService();
+                serviceIsStartedNow = true;
             }
             else if (!everythingServiceManager.IsServiceRunning())
             {
                 everythingServiceManager.StartService();
+                serviceIsStartedNow = true;
+            }
+            // if only service is running
+            if (everythingServiceManager.GetNumberOfEverythingProcess() <= 1)
+            {
+                if (serviceIsStartedNow)
+                {
+                    // wait untill service will be fine
+                    System.Threading.Thread.Sleep(3000);
+                }
+                everythingServiceManager.StartClientInBackgroundMode();
             }
 
-            everythingServiceManager.StartClientInBackgroundMode();
-
             var everythingManager = new EverythingManager();
-            everythingManager.Init();
+            everythingManager.Init(extensionPath);
             EverythingSearchTask.CommandPackage = this;
         }
-
         #endregion
     }
 }

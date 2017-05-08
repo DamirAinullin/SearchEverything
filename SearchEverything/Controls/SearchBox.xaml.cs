@@ -3,8 +3,10 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using SearchEverything.EverythingApi;
+using SearchEverything.Search;
+using SearchEverything.Utilities;
 
-namespace SearchEverything
+namespace SearchEverything.Controls
 {
     /// <summary>
     /// Interaction logic for SearchBox.xaml

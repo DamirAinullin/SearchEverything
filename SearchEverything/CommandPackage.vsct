@@ -56,7 +56,7 @@
         <Parent guid="guidSearchWindowCommandPackageCmdSet" id="MyMenuGroup" />
         <Icon guid="guidImages" id="bmpPicSearch" />
         <Strings>
-          <ButtonText>Search Everything Window</ButtonText>
+          <ButtonText>Everything Explorer</ButtonText>
         </Strings>
       </Button>
       <Button guid="guidSearchWindowCommandPackageCmdSet" id="cmdidSearchWindowSearchWindowCommand" priority="0x0100" type="Button">

@@ -2,8 +2,9 @@
 using System.Globalization;
 using System.Windows;
 using System.Windows.Media;
+using SearchEverything.Search;
 
-namespace SearchEverything
+namespace SearchEverything.Utilities
 {
     public class TextWidthManager
     {

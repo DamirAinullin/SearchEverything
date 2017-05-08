@@ -10,7 +10,7 @@ using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
 
-namespace SearchEverything
+namespace SearchEverything.Search
 {
     /// <summary>
     /// Command handler

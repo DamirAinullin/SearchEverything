@@ -22,9 +22,9 @@ namespace SearchEverything.EverythingApi
             return dllHandle.ToString();  // Loading done !
         }
 
-        public void Init()
+        public void Init(string extensionPath)
         {
-            var sdkPath = Path.Combine(Directory.GetCurrentDirectory(), @"Everything\x86", Dll);
+            var sdkPath = Path.Combine(extensionPath, @"Everything\x86", Dll);
             GetTheDllHandle(sdkPath);
         }
     }

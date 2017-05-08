@@ -2,6 +2,9 @@
 using System.Text;
 using System.Threading;
 using SearchEverything.EverythingApi.Exceptions;
+using SearchEverything.Icons;
+using SearchEverything.Search;
+using SearchEverything.Utilities;
 
 namespace SearchEverything.EverythingApi
 {
@@ -129,6 +132,7 @@ namespace SearchEverything.EverythingApi
             var buffer = new StringBuilder(BufferSize);
             var everythingGetNumResults = EverythingNativeApi.Everything_GetNumResults();
             var resultList = new List<SearchResult>(everythingGetNumResults);
+
             for (int idx = 0; idx < everythingGetNumResults; ++idx)
             {
                 EverythingNativeApi.Everything_GetResultFullPathNameW(idx, buffer, BufferSize);
@@ -139,13 +143,14 @@ namespace SearchEverything.EverythingApi
                     FullPath = fullPath,
                     ShowPath = _textWidthManager.GetSubStringForWidth(fullPath, searchBoxInfo)
                 };
-                result.ImageSource = IconManager.GetImageSource(result.FullPath, result.Type);
                 if (IncludeFolders)
                 {
                     result.Type = EverythingNativeApi.Everything_IsFolderResult(idx)
                         ? ResultType.Folder
                         : ResultType.File;
                 }
+                result.ImageSource = IconManager.GetImageSource(result.FullPath, result.Type);
+                
                 resultList.Add(result);
 
                 token.ThrowIfCancellationRequested();

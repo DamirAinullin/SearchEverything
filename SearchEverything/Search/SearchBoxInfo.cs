@@ -1,4 +1,4 @@
-namespace SearchEverything
+namespace SearchEverything.Search
 {
     public class SearchBoxInfo
     {

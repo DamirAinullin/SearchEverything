@@ -1,11 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Runtime.InteropServices;
-using Microsoft.Internal.VisualStudio.PlatformUI;
 using Microsoft.VisualStudio.PlatformUI;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
 
-namespace SearchEverything
+namespace SearchEverything.Search
 {
     /// <summary>
     /// This class implements the tool window exposed by this package and hosts a user control.
@@ -26,7 +25,7 @@ namespace SearchEverything
             base(null)
         {
             // Set the window title reading it from the resources.
-            Caption = "Search Everything Window";
+            Caption = "Everything Explorer";
             // Set the image that will appear on the tab of the window frame
             // when docked with an other window
             // The resource ID correspond to the one defined in the resx file
@@ -38,7 +37,7 @@ namespace SearchEverything
             // This is the user control hosted by the tool window; Note that, even if this class implements IDisposable,
             // we are not calling Dispose on this object. This is because ToolWindowPane calls Dispose on 
             // the object returned by the Content property.
-            Content = new SearchBox();
+            Content = new Controls.SearchBox();
         }
 
         public override bool SearchEnabled => true;
@@ -54,14 +53,14 @@ namespace SearchEverything
 
         public override void ClearSearch()
         {
-            SearchBox control = (SearchBox)Content;
+            Controls.SearchBox control = (Controls.SearchBox)Content;
             control.ResultListBox.ItemsSource = null;
         }
 
         public override void ProvideSearchSettings(IVsUIDataSource pSearchSettings)
         {
-            Utilities.SetValue(pSearchSettings, SearchSettingsDataSource.SearchStartTypeProperty.Name, (uint)VSSEARCHSTARTTYPE.SST_INSTANT);
-            Utilities.SetValue(pSearchSettings, SearchSettingsDataSource.SearchProgressTypeProperty.Name, (uint)VSSEARCHPROGRESSTYPE.SPT_DETERMINATE);
+            Microsoft.Internal.VisualStudio.PlatformUI.Utilities.SetValue(pSearchSettings, SearchSettingsDataSource.SearchStartTypeProperty.Name, (uint)VSSEARCHSTARTTYPE.SST_INSTANT);
+            Microsoft.Internal.VisualStudio.PlatformUI.Utilities.SetValue(pSearchSettings, SearchSettingsDataSource.SearchProgressTypeProperty.Name, (uint)VSSEARCHPROGRESSTYPE.SPT_DETERMINATE);
         }
 
         private IVsEnumWindowSearchOptions _optionsEnum;
