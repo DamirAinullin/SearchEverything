@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi" xmlns:VSExtension="http://schemas.microsoft.com/wix/VSExtension">
+	<Product Id="*" Name="SetupSearchEverything" Language="1033" Version="1.0.0.0" Manufacturer="Damir Ainullin" UpgradeCode="8ae839d7-12e2-4698-b97d-520329bd25db">
+		<Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" />
+    
+	  <PropertyRef Id="VS2015DEVENV" />
+
+	  <Condition Message="Microsoft Visual Studio 2015 is not installed. It is mandatory in order to install this product to have a valid Visual Studio 2015.">
+	    <![CDATA[Installed OR VS2015DEVENV]]>
+	  </Condition>
+    
+		<MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
+	  <MediaTemplate EmbedCab="yes" />
+    
+	  <Binary Id="CustomActions" SourceFile="$(var.SetupSearchEverything.CustomActions.TargetDir)$(var.SetupSearchEverything.CustomActions.TargetName).dll" />
+    
+	  <CustomAction Id="InstallEverythingService" BinaryKey="CustomActions" DllEntry="InstallEverythingService" Execute="deferred" Impersonate="yes" Return="check" />
+	  <CustomAction Id="UninstallEverythingService" BinaryKey="CustomActions" DllEntry="UninstallEverythingService" Execute="deferred" Impersonate="yes" Return="check" />
+	  
+    <!-- go! -->
+	  <InstallExecuteSequence>
+	    <Custom Action="InstallEverythingService" After="InstallFiles">(NOT Installed) OR (Installed AND REINSTALL) OR (NOT REMOVE AND UPGRADINGPRODUCTCODE)</Custom>
+	    <Custom Action="UninstallEverythingService" After="RemoveRegistryValues">REMOVE AND NOT UPGRADINGPRODUCTCODE</Custom>
+	  </InstallExecuteSequence>
+    
+		<Feature Id="ProductFeature" Title="Installer" Level="1">
+	    <ComponentRef Id="SearchEverything" />
+	  </Feature>
+	</Product>
+
+	<Fragment>
+		<Directory Id="TARGETDIR" Name="SourceDir">
+			<Directory Id="ProgramFilesFolder">
+				<Directory Id="INSTALLFOLDER" Name="SetupSearchEverything" />
+			</Directory>
+		</Directory>
+	</Fragment>
+  
+  <Fragment>
+    <Component Id="SearchEverything" Guid="A93F32FC-4B97-4BA7-BAA0-1670D22EC095" Directory="INSTALLFOLDER">
+      <VSExtension:VsixPackage File="SearchEverythingFile" PackageId="SearchEverything.Damir Ainullin.dbfee868-ecc6-4017-a542-12b8b7116e13" Target="professional" TargetVersion="14.0" Vital="yes" Permanent="no" />
+      <File Id="SearchEverythingFile" Name="$(var.SearchEverything.TargetName).vsix" Source="$(var.SearchEverything.TargetDir)\$(var.SearchEverything.TargetName).vsix" />
+    </Component>
+  </Fragment>
+</Wix>

@@ -19,7 +19,7 @@ namespace SearchEverything.EverythingApi
             {
                 return Marshal.GetLastWin32Error().ToString(); // Error Code while loading DLL
             }
-            return dllHandle.ToString();  // Loading done !
+            return dllHandle.ToString();  // Loading done!
         }
 
         public void Init(string extensionPath)

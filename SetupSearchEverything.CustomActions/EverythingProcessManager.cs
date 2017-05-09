@@ -4,7 +4,7 @@ using System.IO;
 using System.Linq;
 using System.ServiceProcess;
 
-namespace SearchEverything.Utilities
+namespace SetupSearchEverything.CustomActions
 {
     public class EverythingProcessManager
     {
@@ -51,17 +51,6 @@ namespace SearchEverything.Utilities
         {
             var service = ServiceController.GetServices().FirstOrDefault(s => s.ServiceName == "Everything");
             return service?.Status == ServiceControllerStatus.Running;
-        }
-
-        public void StartClientInBackgroundMode()
-        {
-            Process.Start(Path.Combine(_extensionPath, $@"Everything\{_bitness}\Everything.exe"), "-startup");
-        }
-
-        public int GetNumberOfEverythingProcess()
-        {
-            var processes = Process.GetProcessesByName("everything");
-            return processes.Length;
         }
     }
 }
