@@ -81,28 +81,28 @@ namespace SearchEverything
 
             var extensionUtility = new ExtensionUtility(typeof(CommandPackage));
             string extensionPath = extensionUtility.GetExtensionPath();
-            var everythingServiceManager = new EverythingProcessManager(extensionPath);
+            var everythingProcessManager = new EverythingProcessManager(extensionPath);
 
             bool serviceIsStartedNow = false;
-            if (!everythingServiceManager.IsServiceInstalled())
+            if (!everythingProcessManager.IsServiceInstalled())
             {
-                everythingServiceManager.InstallService();
+                everythingProcessManager.InstallService();
                 serviceIsStartedNow = true;
             }
-            else if (!everythingServiceManager.IsServiceRunning())
+            else if (!everythingProcessManager.IsServiceRunning())
             {
-                everythingServiceManager.StartService();
+                everythingProcessManager.StartService();
                 serviceIsStartedNow = true;
             }
             // if only service is running
-            if (everythingServiceManager.GetNumberOfEverythingProcess() <= 1)
+            if (everythingProcessManager.GetNumberOfEverythingProcess() <= 1)
             {
                 if (serviceIsStartedNow)
                 {
                     // wait untill service will be fine
                     System.Threading.Thread.Sleep(3000);
                 }
-                everythingServiceManager.StartClientInBackgroundMode();
+                everythingProcessManager.StartClientInBackgroundMode();
             }
 
             var everythingManager = new EverythingManager();

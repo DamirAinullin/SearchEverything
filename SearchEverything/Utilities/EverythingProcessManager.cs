@@ -18,26 +18,30 @@ namespace SearchEverything.Utilities
 
         public void InstallService()
         {
-            Process.Start(Path.Combine(_extensionPath, $@"Everything\{_bitness}\Everything.exe"), "-install-service");
+            var process = Process.Start(Path.Combine(_extensionPath, $@"Everything\{_bitness}\Everything.exe"), "-install-service");
+            process?.WaitForExit(10000);
             var service = ServiceController.GetServices().FirstOrDefault(s => s.ServiceName == "Everything");
             service?.WaitForStatus(ServiceControllerStatus.Running, new TimeSpan(0, 0, 0, 15));
         }
 
         public void UninstallService()
         {
-            Process.Start(Path.Combine(_extensionPath, $@"Everything\{_bitness}\Everything.exe"), "-uninstall-service");
+            var process = Process.Start(Path.Combine(_extensionPath, $@"Everything\{_bitness}\Everything.exe"), "-uninstall-service");
+            process?.WaitForExit(10000);
         }
 
         public void StartService()
         {
-            Process.Start(Path.Combine(_extensionPath, $@"Everything\{_bitness}\Everything.exe"), "-start-service");
+            var process = Process.Start(Path.Combine(_extensionPath, $@"Everything\{_bitness}\Everything.exe"), "-start-service");
+            process?.WaitForExit(10000);
             var service = ServiceController.GetServices().FirstOrDefault(s => s.ServiceName == "Everything");
             service?.WaitForStatus(ServiceControllerStatus.Running, new TimeSpan(0, 0, 0, 15));
         }
 
         public void StopService()
         {
-            Process.Start(Path.Combine(_extensionPath, $@"Everything\{_bitness}\Everything.exe"), "-stop-service");
+            var process = Process.Start(Path.Combine(_extensionPath, $@"Everything\{_bitness}\Everything.exe"), "-stop-service");
+            process?.WaitForExit(10000);
             var service = ServiceController.GetServices().FirstOrDefault(s => s.ServiceName == "Everything");
             service?.WaitForStatus(ServiceControllerStatus.Stopped, new TimeSpan(0, 0, 0, 15));
         }
@@ -55,7 +59,8 @@ namespace SearchEverything.Utilities
 
         public void StartClientInBackgroundMode()
         {
-            Process.Start(Path.Combine(_extensionPath, $@"Everything\{_bitness}\Everything.exe"), "-startup");
+            var process = Process.Start(Path.Combine(_extensionPath, $@"Everything\{_bitness}\Everything.exe"), "-startup");
+            process?.WaitForExit(10000);
         }
 
         public int GetNumberOfEverythingProcess()

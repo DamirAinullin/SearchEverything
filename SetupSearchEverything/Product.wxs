@@ -4,7 +4,7 @@
 		<Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" />
     
 	  <PropertyRef Id="VS2015DEVENV" />
-
+    
 	  <Condition Message="Microsoft Visual Studio 2015 is not installed. It is mandatory in order to install this product to have a valid Visual Studio 2015.">
 	    <![CDATA[Installed OR VS2015DEVENV]]>
 	  </Condition>
@@ -12,15 +12,20 @@
 		<MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
 	  <MediaTemplate EmbedCab="yes" />
     
-	  <Binary Id="CustomActions" SourceFile="$(var.SetupSearchEverything.CustomActions.TargetDir)$(var.SetupSearchEverything.CustomActions.TargetName).dll" />
+	  <Binary Id="CustomActions" SourceFile="$(var.SetupSearchEverything.CustomActions.TargetDir)$(var.SetupSearchEverything.CustomActions.TargetName).CA.dll" />
+	  <Property Id="InstallDir" Value="DefaultValue" />
     
-	  <CustomAction Id="InstallEverythingService" BinaryKey="CustomActions" DllEntry="InstallEverythingService" Execute="deferred" Impersonate="yes" Return="check" />
-	  <CustomAction Id="UninstallEverythingService" BinaryKey="CustomActions" DllEntry="UninstallEverythingService" Execute="deferred" Impersonate="yes" Return="check" />
-	  
+	  <CustomAction Id="SetDirProp" Property="InstallDir" Value="[INSTALLFOLDER]" />
+	  <CustomAction Id="InstallEverythingServiceAction" BinaryKey="CustomActions" DllEntry="InstallEverythingService" Execute="deferred" Impersonate="yes" Return="check" />
+	  <CustomAction Id="SetDirProp2" Property="InstallDir" Value="[INSTALLFOLDER]" />
+    <CustomAction Id="UninstallEverythingServiceAction" BinaryKey="CustomActions" DllEntry="UninstallEverythingService" Execute="deferred" Impersonate="yes" Return="check" />
+ 
     <!-- go! -->
 	  <InstallExecuteSequence>
-	    <Custom Action="InstallEverythingService" After="InstallFiles">(NOT Installed) OR (Installed AND REINSTALL) OR (NOT REMOVE AND UPGRADINGPRODUCTCODE)</Custom>
-	    <Custom Action="UninstallEverythingService" After="RemoveRegistryValues">REMOVE AND NOT UPGRADINGPRODUCTCODE</Custom>
+	    <Custom Action="SetDirProp" Before="InstallEverythingServiceAction">(NOT Installed) OR (Installed AND REINSTALL) OR (NOT REMOVE AND UPGRADINGPRODUCTCODE)</Custom>
+	    <Custom Action="InstallEverythingServiceAction" Before="InstallFinalize">(NOT Installed) OR (Installed AND REINSTALL) OR (NOT REMOVE AND UPGRADINGPRODUCTCODE)</Custom>
+      <Custom Action="SetDirProp2" Before="UninstallEverythingServiceAction">REMOVE AND NOT UPGRADINGPRODUCTCODE</Custom>
+      <Custom Action="UninstallEverythingServiceAction" After="RemoveRegistryValues">REMOVE AND NOT UPGRADINGPRODUCTCODE</Custom>
 	  </InstallExecuteSequence>
     
 		<Feature Id="ProductFeature" Title="Installer" Level="1">
