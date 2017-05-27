@@ -27,7 +27,7 @@ namespace SetupSearchEverything.CustomActions
                     everythingProcessManager.UninstallService();
                 }
                 everythingProcessManager.InstallService();
-                // wait untill service will be fine
+                // wait until service will be fine
                 Thread.Sleep(3000);
                 everythingProcessManager.StartClientInBackgroundMode();
                 return ActionResult.Success;
@@ -64,8 +64,8 @@ namespace SetupSearchEverything.CustomActions
 
                 everythingProcessManager.StopClient();
 
-                var cleanuper = new Cleanuper(logger);
-                cleanuper.DeleteDirectory(installFolder);
+                var cleanup = new Cleanuper(logger);
+                cleanup.DeleteDirectory(installFolder);
 
                 return ActionResult.Success;
             }

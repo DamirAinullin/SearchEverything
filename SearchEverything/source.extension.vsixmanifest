@@ -1,9 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
   <Metadata>
-    <Identity Id="SearchEverything.Damir Ainullin.dbfee868-ecc6-4017-a542-12b8b7116e13" Version="1.0" Language="en-US" Publisher="Damir Ainullin" />
+    <Identity Id="SearchEverything.Damir Ainullin.dbfee868-ecc6-4017-a542-12b8b7116e13" Version="1.0" Language="en-US" Publisher="DAinullin" />
     <DisplayName>SearchEverything</DisplayName>
-    <Description xml:space="preserve">Visual Stuidio extension based on Everything search engine (https://www.voidtools.com/). You can find any file you want immediately.</Description>
+    <Description xml:space="preserve">Visual Studio extension based on Everything search engine (https://www.voidtools.com/). You can find any file you want immediately.</Description>
     <MoreInfo>https://github.com/DamirAinullin/SearchEverything</MoreInfo>
     <License>LICENSE.txt</License>
     <Icon>Resources\Icons\search-everything.png</Icon>
@@ -11,7 +11,7 @@
     <Tags>Everything, Search, Find, Files</Tags>
   </Metadata>
   <Installation>
-    <InstallationTarget Id="Microsoft.VisualStudio.Community" Version="[14.0]" />
+    <InstallationTarget Id="Microsoft.VisualStudio.Community" Version="[14.0, 15.0]" />
   </Installation>
   <Dependencies>
     <Dependency Id="Microsoft.Framework.NDP" DisplayName="Microsoft .NET Framework" d:Source="Manual" Version="[4.5,)" />
@@ -22,4 +22,9 @@
     <Asset Type="Microsoft.VisualStudio.MefComponent" d:Source="Project" d:ProjectName="%CurrentProject%" Path="|%CurrentProject%|" />
     <Asset Type="Microsoft.VisualStudio.ToolboxControl" d:Source="Project" d:ProjectName="%CurrentProject%" Path="|%CurrentProject%;PkgdefProjectOutputGroup|" />
   </Assets>
+  <Prerequisites>
+    <Prerequisite Id="Microsoft.VisualStudio.Component.CoreEditor" Version="[15.0,16.0)" DisplayName="Visual Studio core editor" />
+    <Prerequisite Id="Microsoft.VisualStudio.Component.DiagnosticTools" Version="[15.0.25814.0,16.0)" />
+    <Prerequisite Id="Microsoft.VisualStudio.Shell.12.0" Version="[12.0]" />
+  </Prerequisites>
 </PackageManifest>
